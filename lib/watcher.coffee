@@ -7,9 +7,9 @@ class Watcher extends EventEmitter2
     super()
     #@editor.on 'grammar-changed', @verifyGrammar
 
-    @editor.onDidChangeCursorPosition @onCursorMoved
     @editor.onDidDestroy @onDestroyed
     @editor.onDidStopChanging @onBufferChanged
+    @editor.onDidChangeCursorPosition @onCursorMoved
 
     @moduleManager.on 'changed', @verifyGrammar
     @verifyGrammar()
@@ -235,7 +235,7 @@ class Watcher extends EventEmitter2
       @abort()
     else
       clearTimeout @cursorMovedTimeoutId
-      @cursorMovedTimeoutId = setTimeout @onCursorMovedAfter, 0
+      @cursorMovedTimeoutId = setTimeout @onCursorMovedAfter, 100
 
   onCursorMovedAfter: =>
     @destroyReferences()
