@@ -9,7 +9,7 @@ class Watcher extends EventEmitter2
 
     @editor.onDidChangeCursorPosition @onCursorMoved
     @editor.onDidDestroy @onDestroyed
-    @editor.onDidChange @onBufferChanged
+    @editor.onDidStopChanging @onBufferChanged
 
     @moduleManager.on 'changed', @verifyGrammar
     @verifyGrammar()
@@ -227,8 +227,7 @@ class Watcher extends EventEmitter2
 
   onBufferChanged: =>
     return unless @eventBufferChanged
-    clearTimeout @bufferChangedTimeoutId
-    @bufferChangedTimeoutId = setTimeout @parse, 0
+    @parse()
 
   onCursorMoved: =>
     return unless @eventCursorMoved
