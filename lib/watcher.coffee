@@ -115,8 +115,8 @@ class Watcher extends EventEmitter2
     delete @errorMarkers
 
   createErrors: (errors) =>
-    @errorMarkers = for { location, range, message } in errors
     d 'create errors'
+    @errorMarkers = for { range, message } in errors
       marker = @editor.markBufferRange range
       d 'marker', range, marker
       @editor.decorateMarker marker, type: 'highlight', class: 'refactor-error'
@@ -216,9 +216,7 @@ class Watcher extends EventEmitter2
     # Start highlighting life cycle.
     d 'done and reparse'
     @parse()
-    @eventBufferChanged = off
     @eventBufferChanged = on
-    @eventCursorMoved = off
     @eventCursorMoved = on
 
     # Returns true not to abort keyboard binding.
