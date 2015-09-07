@@ -120,7 +120,8 @@ class Watcher extends EventEmitter2
       marker = @editor.markBufferRange range
       d 'marker', range, marker
       @editor.decorateMarker marker, type: 'highlight', class: 'refactor-error'
-      @editor.decorateMarker marker, type: 'gutter', class: 'refactor-error'
+      @editor.decorateMarker marker, type: 'line-number', class: 'refactor-error'
+      # TODO: show error message
       marker
 
   destroyReferences: ->
