@@ -131,6 +131,7 @@ class Watcher extends EventEmitter2
 
   createReferences: ->
     ranges = @ripper.find @editor.getSelectedBufferRange().start
+    return unless ranges? and ranges.length > 0
     @referenceMarkers = for range in ranges
       marker = @editor.markBufferRange range
       @editor.decorateMarker marker, type: 'highlight', class: 'refactor-reference'
@@ -152,7 +153,7 @@ class Watcher extends EventEmitter2
     # When no reference exists, do nothing.
     cursor = @editor.getLastCursor()
     ranges = @ripper.find cursor.getBufferPosition()
-    return false if ranges.length is 0
+    return false unless ranges? and ranges.length > 0
 
     # Pause highlighting life cycle.
     @destroyReferences()
