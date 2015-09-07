@@ -1,4 +1,5 @@
 { EventEmitter2 } = require 'eventemitter2'
+d = (require 'debug') 'watcher'
 
 module.exports =
 class Watcher extends EventEmitter2
@@ -40,6 +41,7 @@ class Watcher extends EventEmitter2
   verifyGrammar: =>
     scopeName = @editor.getGrammar().scopeName
     module = @moduleManager.getModule scopeName
+    d 'verify grammar', scopeName, module
     return if module is @module
     @deactivate()
     return unless module?
@@ -87,6 +89,7 @@ class Watcher extends EventEmitter2
   ###
 
   parse: =>
+    d 'parse'
     @eventCursorMoved = off
     text = @editor.buffer.getText()
     if text isnt @cachedText
@@ -105,6 +108,7 @@ class Watcher extends EventEmitter2
       @createReferences()
 
   destroyErrors: ->
+    d 'destroy errors'
     return unless @errorMarkers?
     for marker in @errorMarkers
       marker.destroy()
@@ -112,7 +116,9 @@ class Watcher extends EventEmitter2
 
   createErrors: (errors) =>
     @errorMarkers = for { location, range, message } in errors
+    d 'create errors'
       marker = @editor.markBufferRange range
+      d 'marker', range, marker
       @editor.decorateMarker marker, type: 'highlight', class: 'refactor-error'
       @editor.decorateMarker marker, type: 'gutter', class: 'refactor-error'
       marker
@@ -207,6 +213,7 @@ class Watcher extends EventEmitter2
     delete @renamingMarkers
 
     # Start highlighting life cycle.
+    d 'done and reparse'
     @parse()
     @eventBufferChanged = off
     @eventBufferChanged = on
@@ -223,6 +230,7 @@ class Watcher extends EventEmitter2
 
   onBufferChanged: =>
     return unless @eventBufferChanged
+    d 'buffer changed'
     @parse()
 
   onCursorMoved: =>
