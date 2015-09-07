@@ -88,22 +88,21 @@ class Watcher extends EventEmitter2
 
   parse: =>
     @eventCursorMoved = off
-    @destroyReferences()
-    @destroyErrors()
     text = @editor.buffer.getText()
     if text isnt @cachedText
+      @destroyReferences()
+      @destroyErrors()
       @cachedText = text
       @ripper.parse text, @onParseEnd
     else
       @onParseEnd()
+    @eventCursorMoved = on
 
   onParseEnd: (errors) =>
     if errors?
       @createErrors errors
     else
       @createReferences()
-      @eventCursorMoved = off
-      @eventCursorMoved = on
 
   destroyErrors: ->
     return unless @errorMarkers?
