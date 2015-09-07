@@ -55,9 +55,6 @@ class Watcher extends EventEmitter2
     @eventDestroyed = on
     @eventBufferChanged = on
 
-    # Execute
-    @parse()
-
   deactivate: ->
     # Stop listening
     @cursorMoved = false
