@@ -1,5 +1,4 @@
 { EventEmitter2 } = require 'eventemitter2'
-{ locationDataToRange } = require './location_data_util'
 
 module.exports =
 class Watcher extends EventEmitter2
@@ -117,9 +116,6 @@ class Watcher extends EventEmitter2
 
   createErrors: (errors) =>
     @errorMarkers = for { location, range, message } in errors
-      if location? #TODO deprecate verification of the location in v0.5
-        range = locationDataToRange location
-
       marker = @editor.markBufferRange range
       @editor.decorateMarker marker, type: 'highlight', class: 'refactor-error'
       @editor.decorateMarker marker, type: 'gutter', class: 'refactor-error'
