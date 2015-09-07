@@ -1,7 +1,7 @@
 {
   "name": "refactor",
   "main": "./lib/refactor",
-  "version": "0.5.1",
+  "version": "0.6.0",
   "description": "Refactoring support",
   "repository": "https://github.com/hax/refactor",
   "license": "MIT",
@@ -9,19 +9,27 @@
     "name": "Daisuke Mino",
     "url": "http://dsk.mn"
   },
+  "contributors": [
+    {
+      "name": "HE Shi-Jun (hax)",
+      "email": "johnhax@gmail.com",
+      "url": "http://johnhax.net/"
+    }
+  ],
   "engines": {
-    "atom": ">0.50.0"
+    "atom": ">1.0.0"
   },
   "scripts": {
     "test": "apm test"
   },
   "dependencies": {
+    "debug": "hax/debug",
     "eventemitter2": "^0.4.14",
     "semver": "^2.3.1"
   },
   "devDependencies": {
-    "grunt": "^0.4.5",
-    "grunt-este-watch": "^0.1.16",
-    "grunt-notify": "^0.3.0"
+    "grunt": "^0.4",
+    "grunt-este-watch": "^0.1",
+    "grunt-notify": "^0.4"
   }
 }
