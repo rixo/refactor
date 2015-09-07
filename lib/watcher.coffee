@@ -12,8 +12,8 @@ class Watcher extends EventEmitter2
     @editor.onDidStopChanging @onBufferChanged
     @editor.onDidChangeCursorPosition @onCursorMoved
 
-    @moduleManager.on 'changed', @verifyGrammar
     @verifyGrammar()
+    @moduleManager.on 'changed', @verifyGrammar
 
   destruct: =>
     @removeAllListeners()

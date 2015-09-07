@@ -15,8 +15,7 @@ class ModuleManager extends EventEmitter2
     @setMaxListeners 0
     #TODO update when package is enabled
     # config.on 'updated.core-disabledPackages', @update
-    #TODO read version from package.json
-    # { @version } = JSON.parse readFileSync 'package.json'
+    { @version } = require '../package.json'
     #atom.workspace.on 'coffee-refactor-became-active', @update
     @update()
 
