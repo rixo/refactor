@@ -10,7 +10,7 @@ With this package, you can rename the name of variables and functions easily.
 This package works with these language plugins.
 You can install using the preferences pane.
 
-* JavaScript: [js-refactor](https://atom.io/packages/js-refactor) [![Build Status](https://travis-ci.org/hax/js-refactor.svg?branch=master)](https://travis-ci.org/hax/js-refactor) [ES6+ support](hax/js-refactor#6)
+* JavaScript: [js-refactor](https://atom.io/packages/js-refactor) [![Build Status](https://travis-ci.org/hax/js-refactor.svg?branch=master)](https://travis-ci.org/hax/js-refactor) with [ES6+ support](https://github.com/hax/js-refactor/issues/6)
 * CoffeeScript: [coffee-refactor](https://atom.io/packages/coffee-refactor)
 * [PHP](https://github.com/hax/refactor/issues/2)
 
@@ -73,8 +73,8 @@ class Riper
 
 ### Examples
 
-* [Ragg-/coffee-refactor](https://github.com/Ragg-/coffee-refactor)
 * [hax/js-refactor](https://github.com/hax/js-refactor)
+* [Ragg-/coffee-refactor](https://github.com/Ragg-/coffee-refactor)
 
 
 ## See
