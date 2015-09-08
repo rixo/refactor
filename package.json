@@ -1,7 +1,7 @@
 {
   "name": "refactor",
   "main": "./lib/refactor",
-  "version": "0.6.0",
+  "version": "0.6.0-dev",
   "description": "Refactoring support",
   "repository": "https://github.com/hax/refactor",
   "license": "MIT",
@@ -17,7 +17,7 @@
     }
   ],
   "engines": {
-    "atom": ">1.0.0"
+    "atom": ">=1.0.0"
   },
   "scripts": {
     "test": "apm test"
