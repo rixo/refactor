@@ -1,21 +1,18 @@
 # Refactor Package
 
-**:zap:Notification:zap:: Activate 'Use React Editor' in preferences pane.**
-Refactor package greater than v0.3 no longer supports for the legacy editor.
-If you want more info about the React Editor, you can see [React Editor Enabled by Default](http://blog.atom.io/2014/07/22/default-to-react-editor.html).
-
 Let's refactor code!
 With this package, you can rename the name of variables and functions easily.
 
 ![capture_rename](https://cloud.githubusercontent.com/assets/514164/2929354/b4e848d4-d788-11e3-99c2-620f406d5e6f.gif)
 
-## Language plugins
+## Language Support
 
 This package works with these language plugins.
 You can install using the preferences pane.
 
-* [coffee-refactor](https://atom.io/packages/coffee-refactor) for CoffeeScript
-* [js-refactor](https://atom.io/packages/js-refactor) for JavaScript
+* JavaScript: [js-refactor](https://atom.io/packages/js-refactor) [![Build Status](https://travis-ci.org/hax/js-refactor.svg?branch=master)](https://travis-ci.org/hax/js-refactor) [ES6+ support](hax/js-refactor#6)
+* CoffeeScript: [coffee-refactor](https://atom.io/packages/coffee-refactor)
+* [PHP](https://github.com/hax/refactor/issues/2)
 
 ## Usage
 
@@ -24,7 +21,7 @@ You can install using the preferences pane.
 3. Type new name.
 4. Finish renaming by using `enter` or removing cursor from the focused symbol.
 
-## User setting
+## User Setting
 
 * Override [keymap](kaymaps/refactor.cson) by using `Atom > Open Your Keymap`.
 * Override [stylesheet](styles/refactor.less) by using `Atom > Open Your Stylesheet`.
@@ -39,8 +36,8 @@ Add `refactor` as `engines` in `package.json`.
 {
   ...
   "engines": {
-    "atom": ">0.50.0",
-    "refactor": ">0.4.0"
+    "atom": ">=1.0.0",
+    "refactor": ">=0.6.0"
   },
   ...
 }
@@ -76,8 +73,8 @@ class Riper
 
 ### Examples
 
-* [minodisk/coffee-refactor](https://github.com/minodisk/coffee-refactor)
-* [minodisk/js-refactor](https://github.com/minodisk/js-refactor)
+* [Ragg-/coffee-refactor](https://github.com/Ragg-/coffee-refactor)
+* [hax/js-refactor](https://github.com/hax/js-refactor)
 
 
 ## See

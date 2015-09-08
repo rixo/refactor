@@ -1,3 +1,16 @@
+## v0.6.0 on 2015-09-08
+
+* Improve error handling
+* Only update references/errors when needed, increase performance
+* Use onDidStopChanging and increase delay of cursor move, increase performance
+* Fix styles for shadow dom
+* Use a config schema to fix #3
+
+## v0.5.0, v0.5.1 on 2015-06-16
+
+* Republished and maintained by [hax](https://github.com/hax)
+* Fix issues of using deprecated api
+
 ## v0.4.1 on 2014/08/16
 
 * Replace deprecated method. #10
