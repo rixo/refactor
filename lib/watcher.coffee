@@ -100,8 +100,6 @@ class Watcher extends EventEmitter2
       @destroyErrors()
       @cachedText = text
       @ripper.parse text, @onParseEnd
-    else
-      @onParseEnd()
     @eventCursorMoved = on
 
   onParseEnd: (errors) =>
