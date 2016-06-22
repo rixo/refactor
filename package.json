@@ -1,7 +1,7 @@
 {
   "name": "refactor",
   "main": "./lib/refactor",
-  "version": "0.6.0",
+  "version": "0.6.1",
   "description": "Refactoring support",
   "repository": "https://github.com/hax/refactor",
   "license": "MIT",
