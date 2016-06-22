@@ -1,10 +1,11 @@
 { EventEmitter2 } = require 'eventemitter2'
-d = (require 'debug') 'watcher'
+d = (require 'debug') 'refactor:watcher'
 
 module.exports =
 class Watcher extends EventEmitter2
 
   constructor: (@moduleManager, @editor) ->
+    d 'constructor'
     super()
     #@editor.on 'grammar-changed', @verifyGrammar
 
@@ -16,6 +17,7 @@ class Watcher extends EventEmitter2
     @moduleManager.on 'changed', @verifyGrammar
 
   destruct: =>
+    d 'destruct'
     @removeAllListeners()
     @deactivate()
     #@editor.off 'grammar-changed', @verifyGrammar
@@ -26,6 +28,7 @@ class Watcher extends EventEmitter2
     delete @module
 
   onDestroyed: =>
+    d 'onDestroyed'
     return unless @eventDestroyed
     @emit 'destroyed', @
 
@@ -61,6 +64,7 @@ class Watcher extends EventEmitter2
     @parse()
 
   deactivate: ->
+    d 'deactivate'
     # Stop listening
     @cursorMoved = false
 
@@ -103,6 +107,7 @@ class Watcher extends EventEmitter2
     @eventCursorMoved = on
 
   onParseEnd: (errors) =>
+    d 'onParseEnd'
     if errors?
       @createErrors errors
     else
@@ -126,12 +131,14 @@ class Watcher extends EventEmitter2
       marker
 
   destroyReferences: ->
+    d 'destroyReferences'
     return unless @referenceMarkers?
     for marker in @referenceMarkers
       marker.destroy()
     delete @referenceMarkers
 
   createReferences: ->
+    d 'createReferences'
     ranges = @ripper.find @editor.getSelectedBufferRange().start
     return unless ranges? and ranges.length > 0
     @referenceMarkers = for range in ranges
@@ -182,6 +189,7 @@ class Watcher extends EventEmitter2
     true
 
   abort: =>
+    d 'abort'
     # When this editor isn't active, do nothing.
     return unless @isActive() and @renamingCursor? and @renamingMarkers?
 
@@ -201,6 +209,7 @@ class Watcher extends EventEmitter2
     @done()
 
   done: ->
+    d 'done'
     # When this editor isn't active, returns false for aborting keyboard binding.
     return false unless @isActive() and @renamingCursor? and @renamingMarkers?
 
