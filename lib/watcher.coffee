@@ -177,10 +177,27 @@ class Watcher extends EventEmitter2
     # Register the markers of the references' ranges.
     # Highlight these markers.
     @renamingMarkers = for range in ranges
-      @editor.addSelectionForBufferRange range
       marker = @editor.markBufferRange range
+      marker.shorthand = range.shorthand
+      marker.delimiter = range.delimiter
+      marker.key = @editor.markBufferRange range.key if range.key
       @editor.decorateMarker marker, type: 'highlight', class: 'refactor-reference'
       marker
+
+    for marker in @renamingMarkers
+      if marker.shorthand
+        range = marker.getBufferRange()
+        origin = @editor.markBufferRange range, invalidate: 'inside'
+        text = @editor.getTextInBufferRange range
+        start = range.start
+        @editor.setTextInBufferRange [start, start], marker.delimiter, undo: 'skip'
+        key = @editor.setTextInBufferRange [start, start], text
+        marker.key = @editor.markBufferRange key
+        marker.setBufferRange origin.getBufferRange()
+
+    for marker in @renamingMarkers
+      @editor.addSelectionForBufferRange marker.getBufferRange()
+
     # Start renaming life cycle.
     @eventCursorMoved = off
     @eventCursorMoved = 'abort'
@@ -188,10 +205,15 @@ class Watcher extends EventEmitter2
     # Returns true not to abort keyboard binding.
     true
 
-  abort: =>
-    d 'abort'
+  abort: (event) =>
     # When this editor isn't active, do nothing.
     return unless @isActive() and @renamingCursor? and @renamingMarkers?
+
+    d 'move cursor from', event.oldBufferPosition, 'to', event.newBufferPosition
+    for marker in @renamingMarkers
+      return if marker.getBufferRange().containsPoint event.newBufferPosition
+    @done()
+    return
 
     # Verify all cursors are in renaming markers.
     # When the cursor is out of marker at least one, abort renaming.
@@ -221,6 +243,11 @@ class Watcher extends EventEmitter2
     delete @renamingCursor
     # Remove all markers for renaming.
     for marker in @renamingMarkers
+      if marker.key
+        key = @editor.getTextInBufferRange marker.key.getBufferRange()
+        value = @editor.getTextInBufferRange marker.getBufferRange()
+        if key == value
+          @editor.setTextInBufferRange [marker.key.getStartBufferPosition(), marker.getStartBufferPosition()], ''
       marker.destroy()
     delete @renamingMarkers
 
@@ -243,10 +270,10 @@ class Watcher extends EventEmitter2
     d 'buffer changed'
     @parse()
 
-  onCursorMoved: =>
+  onCursorMoved: (event) =>
     return unless @eventCursorMoved
     if @eventCursorMoved == 'abort'
-      @abort()
+      @abort event
     else
       clearTimeout @cursorMovedTimeoutId
       @cursorMovedTimeoutId = setTimeout @onCursorMovedAfter, 100
