@@ -1,3 +1,15 @@
+## v0.9.2 on 2016-06-30
+
+* Add keymap example to README, and fix link to keymap.cson
+* Use original debug package to solve install failures
+* Support different styles for references/mutations/declaration
+
+## v0.8.0
+* Correct refactor of shorthands
+
+## v0.6.1 on 2016-06-22
+* Fix issues of #10 reference markers leak
+
 ## v0.6.0 on 2015-09-08
 
 * Improve error handling
