@@ -143,7 +143,11 @@ class Watcher extends EventEmitter2
     return unless ranges? and ranges.length > 0
     @referenceMarkers = for range in ranges
       marker = @editor.markBufferRange range
-      @editor.decorateMarker marker, type: 'highlight', class: 'refactor-reference'
+      cls =
+        if range.type
+          'refactor-' + range.type
+        else 'refactor-reference'
+      @editor.decorateMarker marker, type: 'highlight', class: cls
       marker
 
 
