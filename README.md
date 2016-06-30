@@ -23,7 +23,7 @@ You can install using the preferences pane.
 
 ## User Setting
 
-* Override [keymap](kaymaps/refactor.cson) by using `Atom > Open Your Keymap`.
+* Override [keymap](keymaps/refactor.cson) by using `Atom > Open Your Keymap`.
 * Override [stylesheet](styles/refactor.less) by using `Atom > Open Your Stylesheet`.
 
 ## API Documentation (for plugin developer)
