@@ -23,7 +23,7 @@
     "test": "apm test"
   },
   "dependencies": {
-    "debug": "git+https://github.com/hax/debug",
+    "debug": "^2.0.0",
     "eventemitter2": "^0.4.14",
     "semver": "^2.3.1"
   },

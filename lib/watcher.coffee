@@ -1,5 +1,5 @@
 { EventEmitter2 } = require 'eventemitter2'
-d = (require 'debug') 'refactor:watcher'
+d = (require 'debug/browser') 'refactor:watcher'
 
 module.exports =
 class Watcher extends EventEmitter2

@@ -1,7 +1,7 @@
 Watcher = require './watcher'
 ModuleManager = require './module_manager'
 { packages: packageManager } = atom
-d = (require 'debug') 'refactor'
+d = (require 'debug/browser') 'refactor'
 
 module.exports =
 new class Main
