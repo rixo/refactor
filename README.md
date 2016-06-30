@@ -24,6 +24,14 @@ You can install using the preferences pane.
 ## User Setting
 
 * Override [keymap](keymaps/refactor.cson) by using `Atom > Open Your Keymap`.
+
+For example, you can override the shortcut to `ctrl-alt-e`
+```cson
+'atom-text-editor:not(.mini)':
+  'ctrl-alt-r': 'unset!'
+  'ctrl-alt-e': 'refactor:rename'
+```
+
 * Override [stylesheet](styles/refactor.less) by using `Atom > Open Your Stylesheet`.
 
 ## API Documentation (for plugin developer)
