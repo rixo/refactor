@@ -1,3 +1,4 @@
+{ CompositeDisposable } = require 'atom'
 { EventEmitter2 } = require 'eventemitter2'
 d = (require 'debug/browser') 'refactor:watcher'
 
@@ -5,24 +6,19 @@ module.exports =
 class Watcher extends EventEmitter2
 
   constructor: (@moduleManager, @editor) ->
-    d 'constructor'
     super()
-    #@editor.on 'grammar-changed', @verifyGrammar
-
-    @editor.onDidDestroy @onDestroyed
-    @editor.onDidStopChanging @onBufferChanged
-    @editor.onDidChangeCursorPosition @onCursorMoved
-
+    @disposables = new CompositeDisposable
+    @disposables.add @editor.onDidDestroy @onDestroyed
+    @disposables.add @editor.onDidStopChanging @onBufferChanged
+    @disposables.add @editor.onDidChangeCursorPosition @onCursorMoved
+    @disposables.add @moduleManager.onActivated @verifyGrammar
     @verifyGrammar()
-    @moduleManager.on 'changed', @verifyGrammar
 
-  destruct: =>
-    d 'destruct'
+  dispose: =>
     @removeAllListeners()
     @deactivate()
-    #@editor.off 'grammar-changed', @verifyGrammar
-    @moduleManager.off 'changed', @verifyGrammar
 
+    @disposables.dispose()
     delete @moduleManager
     delete @editor
     delete @module

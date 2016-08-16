@@ -1,3 +1,4 @@
+{ Disposable, CompositeDisposable } = require 'atom'
 Watcher = require './watcher'
 ModuleManager = require './module_manager'
 { packages: packageManager } = atom
@@ -24,22 +25,22 @@ new class Main
 
   activate: (state) ->
     d 'activate'
-    @moduleManager = new ModuleManager
-    @watchers = []
 
-    atom.workspace.observeTextEditors @onCreated
-    atom.commands.add 'atom-text-editor', @renameCommand, @onRename
-    atom.commands.add 'atom-text-editor', @doneCommand, @onDone
+    @moduleManager = new ModuleManager
+    @watchers = new Set
+    disposeWatchers = () -> w.dispose() for w of @watchers
+
+    @disposables = new CompositeDisposable
+    @disposables.add @moduleManager
+    @disposables.add new Disposable disposeWatchers
+    @disposables.add atom.workspace.observeTextEditors @onCreated
+    @disposables.add atom.commands.add 'atom-text-editor', @renameCommand, @onRename
+    @disposables.add atom.commands.add 'atom-text-editor', @doneCommand, @onDone
 
   deactivate: ->
-    @moduleManager.destruct()
-    delete @moduleManager
-    for watcher in @watchers
-      watcher.destruct()
-    delete @watchers
+    d 'deactivate'
 
-    atom.workspaceView.off @renameCommand, @onRename
-    atom.workspaceView.off @doneCommand, @onDone
+    @disposables.dispose()
 
   serialize: ->
 
@@ -51,11 +52,11 @@ new class Main
   onCreated: (editor) =>
     watcher = new Watcher @moduleManager, editor
     watcher.on 'destroyed', @onDestroyed
-    @watchers.push watcher
+    @watchers.add watcher
 
   onDestroyed: (watcher) =>
-    watcher.destruct()
-    @watchers.splice @watchers.indexOf(watcher), 1
+    watcher.dispose()
+    @watchers.delete watcher
 
   onRename: (e) =>
     isExecuted = false

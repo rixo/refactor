@@ -1,43 +1,45 @@
 { satisfies } = require 'semver'
-{ EventEmitter2 } = require 'eventemitter2'
-{ workspace, config, packages: packageManager } = atom
+{ Emitter } = require 'atom'
+{ packages } = atom
 
 isFunction = (func) -> (typeof func) is 'function'
 
 module.exports =
-class ModuleManager extends EventEmitter2
+class ModuleManager
 
   modules: {}
   version: '0.0.0'
 
   constructor: ->
-    super
-    @setMaxListeners 0
-    #TODO update when package is enabled
-    # config.on 'updated.core-disabledPackages', @update
     { @version } = require '../package.json'
-    #atom.workspace.on 'coffee-refactor-became-active', @update
+    @emitter = new Emitter
+    #TODO update when package is enabled
+    # atom.config.on 'updated.core-disabledPackages', @update
+    # atom.workspace.on 'coffee-refactor-became-active', @update
     @update()
 
-  destruct: ->
-    # config.off 'updated.core-disabledPackages', @update
-    #atom.workspace.off 'coffee-refactor-became-active', @update
+  dispose: ->
+    # atom.config.off 'updated.core-disabledPackages', @update
+    # atom.workspace.off 'coffee-refactor-became-active', @update
+    @modules = {}
+    @emitter.dispose()
 
-    delete @modules
+  onActivated: (callback) ->
+    @emitter.on 'activated', callback
 
   update: =>
     @modules = {}
     # Search packages related to refactor package.
-    for metaData in packageManager.getAvailablePackageMetadata()
+    for metaData in packages.getAvailablePackageMetadata()
       # Verify enabled, defined in engines, and satisfied version.
       { name, engines } = metaData
-      continue unless !packageManager.isPackageDisabled(name) and
+      continue unless !packages.isPackageDisabled(name) and
                       (requiredVersion = engines?.refactor)? and
                       satisfies @version, requiredVersion
       @activate name
 
   activate: (name) ->
-    packageManager
+    packages
     .activatePackage name
     .then (pkg) =>
       # Verify module interface.
@@ -52,7 +54,7 @@ class ModuleManager extends EventEmitter2
       for scopeName in Ripper.scopeNames
         @modules[scopeName] = module
 
-      @emit 'changed'
+      @emitter.emit 'activated', name
 
   getModule: (sourceName) ->
     @modules[sourceName]
