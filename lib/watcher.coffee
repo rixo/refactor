@@ -1,33 +1,22 @@
 { CompositeDisposable } = require 'atom'
-{ EventEmitter2 } = require 'eventemitter2'
 d = (require 'debug/browser') 'refactor:watcher'
 
 module.exports =
-class Watcher extends EventEmitter2
+class Watcher
 
   constructor: (@moduleManager, @editor) ->
-    super()
     @disposables = new CompositeDisposable
-    @disposables.add @editor.onDidDestroy @onDestroyed
     @disposables.add @editor.onDidStopChanging @onBufferChanged
     @disposables.add @editor.onDidChangeCursorPosition @onCursorMoved
     @disposables.add @moduleManager.onActivated @verifyGrammar
     @verifyGrammar()
 
   dispose: =>
-    @removeAllListeners()
     @deactivate()
-
     @disposables.dispose()
-    delete @moduleManager
-    delete @editor
-    delete @module
-
-  onDestroyed: =>
-    d 'onDestroyed'
-    return unless @eventDestroyed
-    @emit 'destroyed', @
-
+    @moduleManager = null
+    @editor = null
+    @module = null
 
   ###
   Grammar valification process
@@ -53,7 +42,6 @@ class Watcher extends EventEmitter2
 
     # Start listening
     @eventCursorMoved = on
-    @eventDestroyed = on
     @eventBufferChanged = on
 
     d 'activate and parse'
@@ -65,21 +53,17 @@ class Watcher extends EventEmitter2
     @cursorMoved = false
 
     @eventCursorMoved = off
-    @eventDestroyed = off
     @eventBufferChanged = off
-    clearTimeout @bufferChangedTimeoutId
     clearTimeout @cursorMovedTimeoutId
 
-    # Destruct instances
-    @ripper?.destruct()
+    @ripper?.dispose()
 
     # Remove references
-    delete @bufferChangedTimeoutId
-    delete @cursorMovedTimeoutId
-    delete @module
-    delete @ripper
-    delete @renamingCursor
-    delete @renamingMarkers
+    @cursorMovedTimeoutId = null
+    @module = null
+    @ripper = null
+    @renamingCursor = null
+    @renamingMarkers = null
 
 
   ###
@@ -120,7 +104,7 @@ class Watcher extends EventEmitter2
     return unless @errorMarkers?
     for marker in @errorMarkers
       marker.destroy()
-    delete @errorMarkers
+    @errorMarkers = null
 
   createErrors: (errors) =>
     d 'create errors'
@@ -205,7 +189,6 @@ class Watcher extends EventEmitter2
       @editor.addSelectionForBufferRange marker.getBufferRange()
 
     # Start renaming life cycle.
-    @eventCursorMoved = off
     @eventCursorMoved = 'abort'
 
     # Returns true not to abort keyboard binding.

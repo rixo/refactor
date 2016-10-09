@@ -16,10 +16,6 @@ new class Main
       default: true
 
 
-  ###
-  Life cycle
-  ###
-
   activate: (state) ->
     d 'activate'
 
@@ -30,29 +26,23 @@ new class Main
     @disposables = new CompositeDisposable
     @disposables.add @moduleManager
     @disposables.add new Disposable disposeWatchers
-    @disposables.add atom.workspace.observeTextEditors @onCreated
+    @disposables.add atom.workspace.observeTextEditors (editor) =>
+      watcher = new Watcher @moduleManager, editor
+      @watchers.add watcher
+      editor.onDidDestroy =>
+        @watchers.delete watcher
+        watcher.dispose()
     @disposables.add atom.commands.add 'atom-text-editor', 'refactor:rename', @onRename
     @disposables.add atom.commands.add 'atom-text-editor', 'refactor:done', @onDone
 
   deactivate: ->
     d 'deactivate'
     @disposables.dispose()
+    @moduleManager = null
+    @watchers = null
 
   serialize: ->
 
-
-  ###
-  Events
-  ###
-
-  onCreated: (editor) =>
-    watcher = new Watcher @moduleManager, editor
-    watcher.on 'destroyed', @onDestroyed
-    @watchers.add watcher
-
-  onDestroyed: (watcher) =>
-    watcher.dispose()
-    @watchers.delete watcher
 
   onRename: (e) =>
     isExecuted = false
