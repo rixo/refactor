@@ -7,9 +7,6 @@ d = (require 'debug/browser') 'refactor'
 module.exports =
 new class Main
 
-  renameCommand: 'refactor:rename'
-  doneCommand: 'refactor:done'
-
   config:
     highlightError:
       type: 'boolean'
@@ -34,12 +31,11 @@ new class Main
     @disposables.add @moduleManager
     @disposables.add new Disposable disposeWatchers
     @disposables.add atom.workspace.observeTextEditors @onCreated
-    @disposables.add atom.commands.add 'atom-text-editor', @renameCommand, @onRename
-    @disposables.add atom.commands.add 'atom-text-editor', @doneCommand, @onDone
+    @disposables.add atom.commands.add 'atom-text-editor', 'refactor:rename', @onRename
+    @disposables.add atom.commands.add 'atom-text-editor', 'refactor:done', @onDone
 
   deactivate: ->
     d 'deactivate'
-
     @disposables.dispose()
 
   serialize: ->
