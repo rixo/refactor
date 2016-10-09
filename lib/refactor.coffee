@@ -1,13 +1,11 @@
 Watcher = require './watcher'
 ModuleManager = require './module_manager'
+{ CompositeDisposable } = require 'atom'
 { packages: packageManager } = atom
 d = (require 'debug/browser') 'refactor'
 
 module.exports =
 new class Main
-
-  renameCommand: 'refactor:rename'
-  doneCommand: 'refactor:done'
 
   config:
     highlightError:
@@ -25,11 +23,12 @@ new class Main
   activate: (state) ->
     d 'activate'
     @moduleManager = new ModuleManager
+    @disposables = new CompositeDisposable
     @watchers = []
 
-    atom.workspace.observeTextEditors @onCreated
-    atom.commands.add 'atom-text-editor', @renameCommand, @onRename
-    atom.commands.add 'atom-text-editor', @doneCommand, @onDone
+    @disposables.add atom.workspace.observeTextEditors @onCreated
+    @disposables.add atom.commands.add 'atom-text-editor', 'refactor:rename', @onRename
+    @disposables.add atom.commands.add 'atom-text-editor', 'refactor:done', @onDone
 
   deactivate: ->
     @moduleManager.destruct()
@@ -38,8 +37,8 @@ new class Main
       watcher.destruct()
     delete @watchers
 
-    atom.workspaceView.off @renameCommand, @onRename
-    atom.workspaceView.off @doneCommand, @onDone
+    @disposables.dispose()
+    @disposables = null
 
   serialize: ->
 
