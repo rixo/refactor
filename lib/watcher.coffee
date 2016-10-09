@@ -295,16 +295,3 @@ class Watcher extends EventEmitter2
 
   isActive: ->
     @module? and atom.workspace.getActivePaneItem() is @editor
-
-  # Range to pixel based start and end range for each row.
-  rangeToRows: ({ start, end }) ->
-    for raw in [start.row..end.row] by 1
-      rowRange = @editor.buffer.rangeForRow raw
-      point =
-        left : if raw is start.row then start else rowRange.start
-        right: if raw is end.row then end else rowRange.end
-      pixel =
-        tl: @editorView.pixelPositionForBufferPosition point.left
-        br: @editorView.pixelPositionForBufferPosition point.right
-      pixel.br.top += @editorView.lineHeight
-      pixel
