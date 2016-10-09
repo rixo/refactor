@@ -102,6 +102,12 @@ class Watcher extends EventEmitter2
       @ripper.parse text, @onParseEnd
     @eventCursorMoved = on
 
+  update: (changes) =>
+    return if changes.length is 0
+    if typeof @ripper.update isnt 'function'
+      @parse()
+    else @ripper.update change for change in changes
+
   onParseEnd: (errors) =>
     d 'onParseEnd'
     if errors?
@@ -265,10 +271,10 @@ class Watcher extends EventEmitter2
   User events
   ###
 
-  onBufferChanged: =>
+  onBufferChanged: (event) =>
     return unless @eventBufferChanged
-    d 'buffer changed'
-    @parse()
+    d 'buffer changed', event
+    @update(event.changes)
 
   onCursorMoved: (event) =>
     return unless @eventCursorMoved
