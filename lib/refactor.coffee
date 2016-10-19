@@ -56,7 +56,7 @@ new class Main
 
   onRename: (e) =>
     isExecuted = false
-    for watcher in @watchers
+    for watcher in Array.from @watchers
       isExecuted or= watcher.rename()
     d 'rename', isExecuted
     return if isExecuted
@@ -64,7 +64,7 @@ new class Main
 
   onDone: (e) =>
     isExecuted = false
-    for watcher in @watchers
+    for watcher in Array.from @watchers
       isExecuted or= watcher.done()
     return if isExecuted
     e.abortKeyBinding()
