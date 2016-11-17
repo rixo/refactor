@@ -17,9 +17,12 @@ new class Main
 
 
   activate: (state) ->
+    console.time('activate refactor')
     d 'activate'
 
+    console.time('init module manager')
     @moduleManager = new ModuleManager
+    console.timeEnd('init module manager')
     @watchers = new Set
     disposeWatchers = () -> w.dispose() for w of @watchers
 
@@ -34,6 +37,7 @@ new class Main
         watcher.dispose()
     @disposables.add atom.commands.add 'atom-text-editor', 'refactor:rename', @onRename
     @disposables.add atom.commands.add 'atom-text-editor', 'refactor:done', @onDone
+    console.timeEnd('activate refactor')
 
   deactivate: ->
     d 'deactivate'
