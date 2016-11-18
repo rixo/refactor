@@ -49,6 +49,11 @@ class Watcher
 
   deactivate: ->
     d 'deactivate'
+
+    if @ripper?
+      @ripper.dispose()
+      @ripper = null
+
     # Stop listening
     @cursorMoved = false
 
@@ -56,12 +61,9 @@ class Watcher
     @eventBufferChanged = off
     clearTimeout @cursorMovedTimeoutId
 
-    @ripper?.dispose()
-
     # Remove references
     @cursorMovedTimeoutId = null
     @module = null
-    @ripper = null
     @renamingCursor = null
     @renamingMarkers = null
 
