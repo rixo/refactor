@@ -51,7 +51,7 @@ class Watcher
     d 'deactivate'
 
     if @ripper?
-      @ripper.dispose()
+      @ripper.dispose?()
       @ripper = null
 
     # Stop listening
