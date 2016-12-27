@@ -1,5 +1,5 @@
 { CompositeDisposable } = require 'atom'
-d = (require 'debug/browser') 'refactor:watcher'
+d = (require './debug') 'refactor:watcher'
 
 module.exports =
 class Watcher
