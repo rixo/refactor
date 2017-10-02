@@ -37,6 +37,10 @@ new class Main
         watcher.dispose()
     @disposables.add atom.commands.add 'atom-text-editor', 'refactor:rename', @onRename
     @disposables.add atom.commands.add 'atom-text-editor', 'refactor:done', @onDone
+
+    @disposables.add atom.commands.add 'atom-text-editor', 'refactor-navigate:previous', @onJumpPrevious
+    @disposables.add atom.commands.add 'atom-text-editor', 'refactor-navigate:next', @onJumpNext
+
     console.timeEnd('activate refactor')
 
   deactivate: ->
@@ -47,6 +51,19 @@ new class Main
 
   serialize: ->
 
+  onJumpPrevious: (e) =>
+    isExecuted = false
+    @watchers.forEach (watcher) ->
+      isExecuted or= watcher.jump(-1)
+    return if isExecuted
+    e.abortKeyBinding()
+
+  onJumpNext: (e) =>
+    isExecuted = false
+    @watchers.forEach (watcher) ->
+      isExecuted or= watcher.jump(1)
+    return if isExecuted
+    e.abortKeyBinding()
 
   onRename: (e) =>
     isExecuted = false

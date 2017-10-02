@@ -146,6 +146,25 @@ class Watcher
   3. When detected done command, exit renaming process.
   ###
 
+  jump: (dir) ->
+    return false unless @isActive()
+    cursor = @editor.getLastCursor()
+    locator = this.ripper.locator
+    cursorPosition = cursor.getBufferPosition()
+    cursorLocation = locator(cursorPosition.row, cursorPosition.column)
+    ranges = @ripper.find cursorPosition
+    return false unless ranges? and ranges.length > 0
+    # for range in ranges
+    return ranges.some (range, i) ->
+      rangeStart = locator(range.start.row, range.start.column)
+      rangeEnd = locator(range.end.row, range.end.column)
+      if cursorLocation >= rangeStart and cursorLocation <= rangeEnd
+        next = ranges[i + dir]
+        return true unless next
+        cursor.setBufferPosition(next.start)
+        return true
+
+
   rename: ->
     # When this editor isn't active, returns false to abort keyboard binding.
     return false unless @isActive()

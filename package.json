@@ -1,11 +1,11 @@
 {
-  "name": "refactor",
+  "name": "refactor-navigate",
   "main": "./lib/refactor",
-  "version": "0.11.5",
-  "description": "Refactoring support",
-  "repository": "https://github.com/hax/refactor",
+  "version": "0.12.0",
+  "description": "Navigate and rename references",
+  "repository": "https://github.com/rixo/refactor",
   "license": "MIT",
-  "auther": {
+  "author": {
     "name": "Daisuke Mino",
     "url": "http://dsk.mn"
   },
@@ -14,6 +14,10 @@
       "name": "HE Shi-Jun (hax)",
       "email": "johnhax@gmail.com",
       "url": "http://johnhax.net/"
+    },
+    {
+      "name": "Rixo",
+      "email": "rixo@rixo.fr"
     }
   ],
   "engines": {
